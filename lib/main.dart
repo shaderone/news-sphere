@@ -5,6 +5,7 @@ import 'package:newsapplication/pages/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: FirebaseOptions(
       apiKey: 'AIzaSyD9X_65Gh8__xNrRC8Wc9TJWaPSS0s40Vo',
