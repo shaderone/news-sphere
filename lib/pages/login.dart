@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/pages/signup.dart';
@@ -21,10 +23,11 @@ class _LoginState extends State<Login> {
   Future<void> _loginUser() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential creds = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
+        log("\n\ncreds : ${creds.user!.displayName}\n\n");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LandingPage()),
