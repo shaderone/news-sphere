@@ -35,10 +35,11 @@ class _SignupState extends State<Signup> {
             style: TextStyle(fontSize: 20.0),
           )));
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => Login(),
+        ),
+      );
 
       // Additional logic after successful registration
     } on FirebaseException catch (e) {

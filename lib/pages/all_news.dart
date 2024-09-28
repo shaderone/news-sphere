@@ -74,41 +74,36 @@ class AllNewsSection extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => ArticleView(blogUrl: url)));
       },
-      child: Container(
-        child: Column(
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: news == "Breaking"
-                    ? CachedNetworkImage(
-                        imageUrl: image,
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        "images/business.jpg",
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )),
-            SizedBox(
-              height: 5.0,
-            ),
-            Text(
-              title,
-              maxLines: 2,
-              style: TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              desc,
-              maxLines: 3,
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: news == "Breaking"
+                ? CachedNetworkImage(
+                    imageUrl: image,
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    "images/business.jpg",
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+          ),
+          SizedBox(height: 5.0),
+          Text(
+            title,
+            maxLines: 2,
+            style: TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            desc,
+            maxLines: 3,
+          ),
+          SizedBox(height: 20.0),
+        ],
       ),
     );
   }

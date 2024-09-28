@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/models/article_model.dart';
 import 'package:newsapplication/models/category_model.dart';
@@ -13,6 +14,8 @@ import 'package:newsapplication/services/news.dart';
 import 'package:newsapplication/services/slider_data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'login.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -25,6 +28,8 @@ class _HomeState extends State<Home> {
   List<SliderModel> sliders = [];
   List<ArticleModel> articles = [];
   bool _loading = true, loading2 = true;
+
+  final _auth = FirebaseAuth.instance;
 
   int activeIndex = 0;
   @override
@@ -53,22 +58,41 @@ class _HomeState extends State<Home> {
     });
   }
 
+  // Logout handler
+  void _handleLogout() async {
+    await _auth.signOut();
+    // Check if the widget is still mounted before using context
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Login(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Flutter"),
+            Text("Flutter "),
             Text(
               "News",
               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
             )
           ],
         ),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         elevation: 0.0,
+        actions: [
+          IconButton(
+            onPressed: _handleLogout,
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: _loading
           ? Center(child: CircularProgressIndicator())
@@ -120,7 +144,7 @@ class _HomeState extends State<Home> {
                   loading2
                       ? Center(child: CircularProgressIndicator())
                       : CarouselSlider.builder(
-                          itemCount: 5,
+                          itemCount: sliders.length,
                           itemBuilder: (context, index, realIndex) {
                             String? res = sliders[index].urlToImage;
                             String? res1 = sliders[index].title;
@@ -169,8 +193,8 @@ class _HomeState extends State<Home> {
                     physics: ClampingScrollPhysics(),
                     itemCount: articles.length,
                     itemBuilder: (context, index) {
-                      print(articles.length);
-                      print("${articles[0].title} hlooooo ");
+                      //print(articles.length);
+                      //print("${articles[0].title} hlooooo ");
                       return BlogTile(url: articles[index].url!, desc: articles[index].published!, imageUrl: articles[index].urlToImage!, title: articles[index].title!);
                     },
                   ),
@@ -283,20 +307,25 @@ class BlogTile extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
                       width: MediaQuery.of(context).size.width / 3,
                       height: 200,
-                      color: Colors.red,
-                      child: imageUrl != ""
+                      color: Color.fromARGB(255, 184, 180, 180),
+                      child: imageUrl == ""
                           ? Text("no image vailable")
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                "images/building.jpg",
+                              child: Image.network(
+                                imageUrl,
                                 height: 120,
                                 width: 120,
                                 fit: BoxFit.cover,
-                              ))),
+                              ),
+                            ),
+                    ),
+                  ),
                   SizedBox(
                     width: 8.0,
                   ),
