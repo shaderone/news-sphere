@@ -12,6 +12,7 @@ import 'package:newsapplication/pages/category_news.dart';
 import 'package:newsapplication/services/data.dart';
 import 'package:newsapplication/services/news.dart';
 import 'package:newsapplication/services/slider_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'login.dart';
@@ -60,6 +61,8 @@ class _HomeState extends State<Home> {
 
   // Logout handler
   void _handleLogout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     await _auth.signOut();
     // Check if the widget is still mounted before using context
     if (mounted) {

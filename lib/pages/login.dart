@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapplication/pages/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/widget_model.dart';
 import 'forgot.dart';
 import 'landing_page.dart';
@@ -21,12 +22,14 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _loginUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_formKey.currentState!.validate()) {
       try {
         UserCredential creds = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
+        await prefs.setBool("isloggedin", true);
         log("\n\ncreds : ${creds.user!.displayName}\n\n");
         Navigator.pushReplacement(
           context,
